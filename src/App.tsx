@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { useMarketData } from './hooks/useMarketData';
 import { TradingChart } from './components/TradingChart';
 
 function App() {
-  const [balance, setBalance] = useState(10000.00);
+  const [balance] = useState(10000.00);
   const { initialData, liveTick } = useMarketData(1.0924);
 
   const currentPrice = liveTick ? liveTick.close.toFixed(5) : '1.09240';
