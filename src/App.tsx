@@ -1,121 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useState } from 'react';
+import './App.css';
+import { useMarketData } from './hooks/useMarketData';
+import { TradingChart } from './components/TradingChart';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [balance, setBalance] = useState(10000.00);
+  const { initialData, liveTick } = useMarketData(1.0924);
+
+  const currentPrice = liveTick ? liveTick.close.toFixed(5) : '1.09240';
+  const isPositive = liveTick ? liveTick.close >= liveTick.open : true;
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-container">
+      <nav className="topbar">
+        <div className="logo">TJR AI <span className="tag">PRO</span></div>
+        <div className="paper-trading">
+          Demo Balance: <span className="balance">${balance.toFixed(2)}</span>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
+      </nav>
+      
+      <main className="main-content">
+        <aside className="sidebar">
+          <ul className="nav-links">
+            <li className="active">Dashboard</li>
+            <li>Markets</li>
+            <li>History</li>
+            <li>AI Strategy log</li>
           </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        </aside>
+        
+        <section className="chart-area">
+          <header className="ticker-bar">
+            <h1>EUR/USD <span className={`price ${isPositive ? 'positive' : 'negative'}`}>{currentPrice}</span></h1>
+          </header>
+          <div className="chart-placeholder">
+             {initialData.length > 0 ? (
+                <TradingChart data={initialData as any} currentTick={liveTick as any} />
+             ) : (
+                <div style={{color: 'var(--text-muted)'}}>Live Chart Initializing...</div>
+             )}
+          </div>
+        </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        <aside className="signal-panel">
+          <h2>AI Signal Advisor</h2>
+          <div className="signal-card positive">
+             <h3>BUY SIGNAL</h3>
+             <p>RSI Oversold, fast EMA crossing above slow EMA.</p>
+             <button className="trade-btn buy-btn">Buy Now</button>
+          </div>
+        </aside>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
