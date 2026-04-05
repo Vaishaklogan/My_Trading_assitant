@@ -1,9 +1,9 @@
+"use client";
 import { useState } from 'react';
-import './App.css';
-import { useMarketData } from './hooks/useMarketData';
-import { TradingChart } from './components/TradingChart';
+import { useMarketData } from '../hooks/useMarketData';
+import { TradingChart } from '../components/TradingChart';
 
-function App() {
+export default function App() {
   const [balance] = useState(10000.00);
   const { initialData, liveTick } = useMarketData(1.0924);
 
@@ -54,5 +54,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

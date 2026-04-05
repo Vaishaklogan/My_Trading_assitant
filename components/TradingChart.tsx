@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef } from 'react';
 import { createChart, ColorType } from 'lightweight-charts';
 import type { ISeriesApi, CandlestickData } from 'lightweight-charts';
@@ -7,7 +8,7 @@ interface TradingChartProps {
   currentTick: CandlestickData | null;
 }
 
-export const TradingChart: React.FC<TradingChartProps> = ({ data, currentTick }) => {
+export function TradingChart({ data, currentTick }: TradingChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const candlestickSeriesRef = useRef<ISeriesApi<"Candlestick"> | null>(null);
 
@@ -64,4 +65,4 @@ export const TradingChart: React.FC<TradingChartProps> = ({ data, currentTick })
   }, [currentTick]);
 
   return <div ref={chartContainerRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }} />;
-};
+}
